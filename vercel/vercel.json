@@ -1,9 +1,9 @@
 {
   "version": 2,
-  "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1.js" },
-    { "src": "/game/(.*)", "dest": "/public/lost.html" },
-    { "src": "/(.*)", "dest": "/public/$1" }
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/$1.js" },
+    { "source": "/game/(.*)", "destination": "/public/lost.html" },
+    { "source": "/(.*)", "destination": "/public/$1" }
   ],
   "headers": [
     {
