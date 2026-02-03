@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 — Page Not Found</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 50px 40px;
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+        .ghost {
+            font-size: 80px;
+            margin-bottom: 10px;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        h1 {
+            font-size: 1.8rem;
+            color: #1a1a2e;
+            margin-bottom: 10px;
+        }
+        .subtext {
+            color: #666;
+            font-size: 1rem;
+            margin-bottom: 30px;
+        }
+        .divider {
+            height: 1px;
+            background: #eee;
+            margin: 30px 0;
+        }
+        .coffee-pitch {
+            color: #444;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+        .coffee-cta {
+            display: inline-block;
+            background: #FFDD00;
+            color: #000;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .coffee-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255,221,0,0.3);
+        }
+        .powered {
+            margin-top: 25px;
+            font-size: 0.75rem;
+            color: #999;
+        }
+        .powered a {
+            color: #667eea;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="ghost">👻</div>
+        <h1>Looks like you're lost...</h1>
+        <p class="subtext">This page doesn't exist (anymore).</p>
+        
+        <div class="divider"></div>
+        
+        <p class="coffee-pitch">
+            While you're here, why not buy the site owner a coffee?<br>
+            They'd appreciate it. ☕
+        </p>
+        
+        <a href="https://buymeacoffee.com/warlockholmes" class="coffee-cta" target="_blank">
+            ☕ Buy Me a Coffee
+        </a>
+        
+        <p class="powered">
+            Powered by <a href="https://404r.io">404-Redirect Marketplace</a>
+        </p>
+    </div>
+
+    <script>
+        // Track this 404 hit (fake analytics for demo)
+        console.log('🎯 404 hit tracked for: ' + document.referrer);
+    </script>
+</body>
+</html>

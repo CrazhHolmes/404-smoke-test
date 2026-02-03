@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404-Redirect Marketplace — Turn Dead Links Into Tips</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 50px 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        .emoji { font-size: 60px; margin-bottom: 10px; }
+        h1 {
+            font-size: 2rem;
+            color: #1a1a2e;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+        .tagline {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+        .counter-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+        .counter-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .counter-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        .features {
+            text-align: left;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        .features li {
+            list-style: none;
+            padding: 8px 0;
+            color: #444;
+        }
+        .features li::before {
+            content: "✓";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .cta-box {
+            margin-top: 30px;
+        }
+        .early-access {
+            background: #1a1a2e;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+            margin-bottom: 15px;
+            transition: transform 0.2s;
+        }
+        .early-access:hover {
+            transform: translateY(-2px);
+        }
+        .free-tier {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        .bmc-widget {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="emoji">🔗💀💰</div>
+        <h1>Turn Your 404s Into Tips</h1>
+        <p class="tagline">
+            Every broken link is a missed opportunity.<br>
+            Redirect 404 traffic to a tip jar in 30 seconds.
+        </p>
+        
+        <div class="counter-box">
+            <div class="counter-label">Tips earned from 404s today</div>
+            <div class="counter-value" id="moneyCounter">$0.00</div>
+        </div>
+
+        <ul class="features">
+            <li>One-line JavaScript install</li>
+            <li>Free for first 5,000 redirects/month</li>
+            <li>Instant Buy Me a Coffee integration</li>
+            <li>No signup required to start</li>
+        </ul>
+
+        <div class="cta-box">
+            <a href="#early-access" class="early-access">Get Early Access (Free)</a>
+            <p class="free-tier">Join 12 site owners already monetizing their dead links</p>
+        </div>
+
+        <div class="bmc-widget">
+            <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" 
+                data-name="bmc-button" 
+                data-slug="warlockholmes" 
+                data-color="#FFDD00" 
+                data-emoji="" 
+                data-font="Cookie" 
+                data-text="Support this project" 
+                data-outline-color="#000000" 
+                data-font-color="#000000" 
+                data-coffee-color="#ffffff">
+            </script>
+        </div>
+    </div>
+
+    <script>
+        // Fake counter that ticks up every few seconds
+        let amount = 3.20;
+        const counter = document.getElementById('moneyCounter');
+        
+        function updateCounter() {
+            amount += 0.10;
+            counter.textContent = '$' + amount.toFixed(2);
+        }
+        
+        // Update every 5 seconds
+        setInterval(updateCounter, 5000);
+        counter.textContent = '$' + amount.toFixed(2);
+    </script>
+</body>
+</html>
