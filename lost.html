@@ -1,108 +1,491 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 — Page Not Found</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #1a1a2e;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .container {
-            background: white;
-            border-radius: 20px;
-            padding: 50px 40px;
-            max-width: 450px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-        }
-        .ghost {
-            font-size: 80px;
-            margin-bottom: 10px;
-            animation: float 3s ease-in-out infinite;
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        h1 {
-            font-size: 1.8rem;
-            color: #1a1a2e;
-            margin-bottom: 10px;
-        }
-        .subtext {
-            color: #666;
-            font-size: 1rem;
-            margin-bottom: 30px;
-        }
-        .divider {
-            height: 1px;
-            background: #eee;
-            margin: 30px 0;
-        }
-        .coffee-pitch {
-            color: #444;
-            font-size: 0.95rem;
-            margin-bottom: 20px;
-        }
-        .coffee-cta {
-            display: inline-block;
-            background: #FFDD00;
-            color: #000;
-            padding: 15px 30px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .coffee-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(255,221,0,0.3);
-        }
-        .powered {
-            margin-top: 25px;
-            font-size: 0.75rem;
-            color: #999;
-        }
-        .powered a {
-            color: #667eea;
-            text-decoration: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lost? Catch the Ghost!</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      min-height: 100vh;
+      overflow: hidden;
+      color: #fff;
+    }
+    /* Header bar */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(10px);
+      position: relative;
+      z-index: 100;
+    }
+    .logo {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #e94560;
+    }
+    .stats {
+      display: flex;
+      gap: 25px;
+      font-size: 1.1rem;
+    }
+    .stat {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .stat-value {
+      font-weight: bold;
+      color: #4ecca3;
+      font-size: 1.3rem;
+    }
+    /* Game area */
+    #gameArea {
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 160px);
+      cursor: crosshair;
+    }
+    /* Ghost styles */
+    .ghost {
+      position: absolute;
+      font-size: 50px;
+      user-select: none;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+      filter: drop-shadow(0 0 10px rgba(233,69,96,0.5));
+      animation: float 2s ease-in-out infinite;
+    }
+    .ghost:hover {
+      transform: scale(1.2);
+    }
+    .ghost:active {
+      transform: scale(0.9);
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+    /* Score popup */
+    .scorePopup {
+      position: absolute;
+      font-size: 24px;
+      font-weight: bold;
+      color: #4ecca3;
+      pointer-events: none;
+      animation: popUp 0.8s ease-out forwards;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+    @keyframes popUp {
+      0% { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-50px) scale(1.5); }
+    }
+    /* Start screen */
+    #startScreen, #endScreen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.85);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 200;
+    }
+    #endScreen { display: none; }
+    .screen-title {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      text-align: center;
+      text-shadow: 0 0 20px rgba(233,69,96,0.5);
+    }
+    .screen-subtitle {
+      font-size: 1.2rem;
+      color: #aaa;
+      margin-bottom: 40px;
+      text-align: center;
+      max-width: 400px;
+      line-height: 1.6;
+    }
+    .btn {
+      padding: 15px 50px;
+      font-size: 1.3rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: linear-gradient(135deg, #e94560, #c23a51);
+      color: #fff;
+      box-shadow: 0 5px 20px rgba(233,69,96,0.4);
+    }
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(233,69,96,0.6);
+    }
+    .btn:active {
+      transform: translateY(0);
+    }
+    .final-score {
+      font-size: 5rem;
+      font-weight: bold;
+      color: #4ecca3;
+      margin: 20px 0;
+      text-shadow: 0 0 30px rgba(78,204,163,0.5);
+    }
+    .high-score {
+      font-size: 1.2rem;
+      color: #ffd700;
+      margin-bottom: 30px;
+    }
+    /* Ghost types */
+    .ghost.normal { filter: drop-shadow(0 0 8px rgba(255,255,255,0.3)); }
+    .ghost.fast { filter: drop-shadow(0 0 15px rgba(233,69,96,0.8)); animation-duration: 0.8s; }
+    .ghost.tiny { font-size: 30px; filter: drop-shadow(0 0 5px rgba(78,204,163,0.8)); }
+    .ghost.big { font-size: 70px; filter: drop-shadow(0 0 20px rgba(255,215,0,0.8)); }
+    /* Progress bar */
+    .progress-container {
+      position: absolute;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 300px;
+      height: 10px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #e94560, #4ecca3);
+      width: 100%;
+      transition: width 1s linear;
+    }
+    /* Instructions */
+    .instructions {
+      position: absolute;
+      bottom: 105px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.9rem;
+      color: #888;
+    }
+    /* BMC Section */
+    .bmc-section {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 15px;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(10px);
+      text-align: center;
+      z-index: 50;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+    }
+    .bmc-section p {
+      color: #888;
+      font-size: 0.9rem;
+    }
+    .bmc-button {
+      display: inline-block;
+      background: #ffdd00;
+      color: #000;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 15px rgba(255,221,0,0.4);
+      transition: transform 0.2s;
+    }
+    .bmc-button:hover {
+      transform: translateY(-2px);
+    }
+    .powered-by {
+      position: fixed;
+      bottom: 65px;
+      right: 20px;
+      font-size: 0.75rem;
+      color: #666;
+      z-index: 40;
+    }
+    .powered-by a {
+      color: #667eea;
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <div class="ghost">👻</div>
-        <h1>Looks like you're lost...</h1>
-        <p class="subtext">This page doesn't exist (anymore).</p>
-        
-        <div class="divider"></div>
-        
-        <p class="coffee-pitch">
-            While you're here, why not buy the site owner a coffee?<br>
-            They'd appreciate it. ☕
-        </p>
-        
-        <a href="https://buymeacoffee.com/warlockholmes" class="coffee-cta" target="_blank">
-            ☕ Buy Me a Coffee
-        </a>
-        
-        <p class="powered">
-            Powered by <a href="https://404r.io">404-Redirect Marketplace</a>
-        </p>
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">👻 Ghost Catcher</div>
+    <div class="stats">
+      <div class="stat">Score: <span class="stat-value" id="score">0</span></div>
+      <div class="stat">Time: <span class="stat-value" id="time">30</span>s</div>
+      <div class="stat">Level: <span class="stat-value" id="level">1</span></div>
     </div>
+  </div>
+  <!-- Game Area -->
+  <div id="gameArea"></div>
+  <!-- Time progress bar -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+  <div class="instructions">Click ghosts to score points! Bigger = more points.</div>
+  <!-- Start Screen -->
+  <div id="startScreen">
+    <div class="screen-title">👻 Lost? Catch Some Ghosts!</div>
+    <div class="screen-subtitle">
+      You've stumbled upon a 404 page, but don't be sad! 
+      Catch as many ghosts as you can before time runs out.
+      <br><br>
+      👻 Click ghosts to score<br>
+      ⚡ Faster ghosts = more points<br>
+      👾 Bigger ghosts = bonus points
+    </div>
+    <button class="btn" onclick="startGame()">Start Game</button>
+  </div>
+  <!-- End Screen -->
+  <div id="endScreen">
+    <div class="screen-title">Time's Up!</div>
+    <div class="final-score" id="finalScore">0</div>
+    <div class="high-score" id="highScoreText">New High Score!</div>
+    <div class="screen-subtitle" id="endMessage">
+      Great job! You caught a lot of ghosts.
+    </div>
+    <button class="btn" onclick="startGame()">Play Again</button>
+  </div>
 
-    <script>
-        // Track this 404 hit (fake analytics for demo)
-        console.log('🎯 404 hit tracked for: ' + document.referrer);
-    </script>
+  <!-- BMC Section -->
+  <div class="bmc-section">
+    <p>While you're here, why not buy the site owner a coffee?</p>
+    <a href="https://buymeacoffee.com/warlockholmes" target="_blank" class="bmc-button">
+      ☕ Buy Me a Coffee
+    </a>
+  </div>
+  
+  <div class="powered-by">
+    Powered by <a href="https://github.com/CrazhHolmes/404-smoke-test">404-Redirect Marketplace</a>
+  </div>
+
+  <script>
+    // Game state
+    let score = 0;
+    let timeLeft = 30;
+    let level = 1;
+    let gameInterval;
+    let spawnInterval;
+    let ghostId = 0;
+    let highScore = localStorage.getItem('ghostHighScore') || 0;
+    let isPlaying = false;
+    
+    // Ghost configurations
+    const ghostTypes = [
+      { type: 'normal', emoji: '👻', points: 10, minSize: 50, maxSize: 60, speed: 2000, chance: 0.5 },
+      { type: 'fast', emoji: '👺', points: 25, minSize: 40, maxSize: 50, speed: 800, chance: 0.25 },
+      { type: 'tiny', emoji: '👾', points: 50, minSize: 25, maxSize: 35, speed: 1500, chance: 0.15 },
+      { type: 'big', emoji: '🤡', points: 100, minSize: 70, maxSize: 90, speed: 2500, chance: 0.1 }
+    ];
+    
+    // DOM elements
+    const gameArea = document.getElementById('gameArea');
+    const scoreEl = document.getElementById('score');
+    const timeEl = document.getElementById('time');
+    const levelEl = document.getElementById('level');
+    const progressBar = document.getElementById('progressBar');
+    const startScreen = document.getElementById('startScreen');
+    const endScreen = document.getElementById('endScreen');
+    const finalScoreEl = document.getElementById('finalScore');
+    const highScoreText = document.getElementById('highScoreText');
+    const endMessage = document.getElementById('endMessage');
+    
+    // Start the game
+    function startGame() {
+      score = 0;
+      timeLeft = 30;
+      level = 1;
+      isPlaying = true;
+      ghostId = 0;
+      
+      // Update UI
+      scoreEl.textContent = score;
+      timeEl.textContent = timeLeft;
+      levelEl.textContent = level;
+      progressBar.style.width = '100%';
+      
+      // Hide screens
+      startScreen.style.display = 'none';
+      endScreen.style.display = 'none';
+      
+      // Clear any existing ghosts
+      gameArea.innerHTML = '';
+      
+      // Start timers
+      gameInterval = setInterval(updateTimer, 1000);
+      spawnGhost();
+      spawnInterval = setInterval(spawnGhost, getSpawnRate());
+    }
+    
+    // Update timer and progress bar
+    function updateTimer() {
+      timeLeft--;
+      timeEl.textContent = timeLeft;
+      progressBar.style.width = (timeLeft / 30 * 100) + '%';
+      
+      // Level up every 10 seconds
+      if (timeLeft === 20 || timeLeft === 10) {
+        level++;
+        levelEl.textContent = level;
+        // Reset spawn rate for new level
+        clearInterval(spawnInterval);
+        spawnInterval = setInterval(spawnGhost, getSpawnRate());
+      }
+      
+      if (timeLeft <= 0) {
+        endGame();
+      }
+    }
+    
+    // Get spawn rate based on level
+    function getSpawnRate() {
+      return Math.max(400, 1200 - (level * 100));
+    }
+    
+    // Spawn a new ghost
+    function spawnGhost() {
+      if (!isPlaying) return;
+      
+      // Determine ghost type
+      const rand = Math.random();
+      let cumulative = 0;
+      let selectedType = ghostTypes[0];
+      
+      for (const type of ghostTypes) {
+        cumulative += type.chance;
+        if (rand <= cumulative) {
+          selectedType = type;
+          break;
+        }
+      }
+      
+      // Random size within range
+      const size = Math.floor(Math.random() * (selectedType.maxSize - selectedType.minSize + 1)) + selectedType.minSize;
+      
+      // Create ghost element
+      const ghost = document.createElement('div');
+      ghost.className = `ghost ${selectedType.type}`;
+      ghost.textContent = selectedType.emoji;
+      ghost.style.fontSize = size + 'px';
+      ghost.dataset.points = selectedType.points;
+      ghost.dataset.id = ghostId++;
+      
+      // Random position (keep within bounds)
+      const maxX = gameArea.clientWidth - size;
+      const maxY = gameArea.clientHeight - size - 30;
+      ghost.style.left = Math.random() * maxX + 'px';
+      ghost.style.top = Math.random() * maxY + 'px';
+      
+      // Click handler
+      ghost.addEventListener('click', (e) => {
+        if (!isPlaying) return;
+        e.stopPropagation();
+        
+        const points = parseInt(ghost.dataset.points);
+        score += points;
+        scoreEl.textContent = score;
+        
+        // Show score popup
+        showScorePopup(e.clientX, e.clientY, points);
+        
+        // Remove ghost
+        ghost.remove();
+      });
+      
+      gameArea.appendChild(ghost);
+      
+      // Auto-remove ghost after a few seconds (makes game harder)
+      const lifeTime = Math.max(1500, selectedType.speed - (level * 100));
+      setTimeout(() => {
+        if (ghost.parentNode) {
+          ghost.style.opacity = '0';
+          ghost.style.transition = 'opacity 0.3s';
+          setTimeout(() => ghost.remove(), 300);
+        }
+      }, lifeTime);
+    }
+    
+    // Show floating score popup
+    function showScorePopup(x, y, points) {
+      const popup = document.createElement('div');
+      popup.className = 'scorePopup';
+      popup.textContent = '+' + points;
+      popup.style.left = x + 'px';
+      popup.style.top = y + 'px';
+      document.body.appendChild(popup);
+      
+      setTimeout(() => popup.remove(), 800);
+    }
+    
+    // End the game
+    function endGame() {
+      isPlaying = false;
+      clearInterval(gameInterval);
+      clearInterval(spawnInterval);
+      
+      // Check high score
+      const isNewHighScore = score > highScore;
+      if (isNewHighScore) {
+        highScore = score;
+        localStorage.setItem('ghostHighScore', highScore);
+      }
+      
+      // Update end screen
+      finalScoreEl.textContent = score;
+      highScoreText.style.display = isNewHighScore ? 'block' : 'none';
+      highScoreText.textContent = isNewHighScore ? '🏆 New High Score!' : `High Score: ${highScore}`;
+      
+      // Update message based on score
+      let message = '';
+      if (score >= 500) {
+        message = 'Incredible! You are a ghost-catching master!';
+      } else if (score >= 300) {
+        message = 'Great job! Those ghosts never stood a chance.';
+      } else if (score >= 150) {
+        message = 'Nice work! Keep practicing to catch more.';
+      } else if (score >= 50) {
+        message = 'Not bad! Try again to improve your score.';
+      } else {
+        message = 'Those ghosts got away this time. Want to retry?';
+      }
+      endMessage.textContent = message;
+      
+      // Show end screen
+      endScreen.style.display = 'flex';
+    }
+    
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      // Keep ghosts within bounds
+      const ghosts = document.querySelectorAll('.ghost');
+      ghosts.forEach(ghost => {
+        const maxX = gameArea.clientWidth - parseInt(ghost.style.fontSize);
+        const maxY = gameArea.clientHeight - parseInt(ghost.style.fontSize) - 30;
+        if (parseInt(ghost.style.left) > maxX) ghost.style.left = maxX + 'px';
+        if (parseInt(ghost.style.top) > maxY) ghost.style.top = maxY + 'px';
+      });
+    });
+  </script>
 </body>
 </html>
