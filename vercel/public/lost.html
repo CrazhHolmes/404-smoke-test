@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="pageTitle">Lost? Catch Some Ghosts!</title>
+  <style>
+    /* ========================================
+       THEME SYSTEM - CSS Variables
+       ======================================== */
+    :root {
+      /* Default/Dark theme (base) */
+      --bg-primary: #1a1a2e;
+      --bg-secondary: #16213e;
+      --bg-tertiary: #0f3460;
+      --accent: #e94560;
+      --accent-secondary: #c23a51;
+      --text: #ffffff;
+      --text-muted: #aaaaaa;
+      --success: #4ecca3;
+      --warning: #ffd700;
+      --ghost-glow: rgba(233, 69, 96, 0.5);
+      --font-main: 'Segoe UI', system-ui, sans-serif;
+      --border-radius: 50px;
+      --btn-radius: 50px;
+    }
+
+    /* Theme: Retro Arcade */
+    [data-theme="retro"] {
+      --bg-primary: #0d0d0d;
+      --bg-secondary: #1a1a1a;
+      --bg-tertiary: #0d0d0d;
+      --accent: #ff6f00;
+      --accent-secondary: #ff8f00;
+      --text: #00ff99;
+      --text-muted: #00cc7a;
+      --success: #00ff99;
+      --warning: #ffea00;
+      --ghost-glow: rgba(255, 234, 0, 0.8);
+      --font-main: 'Courier New', monospace;
+      --border-radius: 0;
+      --btn-radius: 0;
+    }
+
+    /* Theme: Cyberpunk Neon */
+    [data-theme="cyberpunk"] {
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #111111;
+      --bg-tertiary: #0b0b2c;
+      --accent: #ff00ff;
+      --accent-secondary: #ff00aa;
+      --text: #00ffff;
+      --text-muted: #00aaaa;
+      --success: #00ff00;
+      --warning: #ff00ff;
+      --ghost-glow: rgba(255, 0, 255, 0.8);
+      --font-main: 'Orbitron', 'Segoe UI', sans-serif;
+      --border-radius: 4px;
+      --btn-radius: 4px;
+    }
+
+    /* Theme: Minimalist Light */
+    [data-theme="minimal"] {
+      --bg-primary: #fafafa;
+      --bg-secondary: #f5f5f5;
+      --bg-tertiary: #eeeeee;
+      --accent: #4ecca3;
+      --accent-secondary: #3db892;
+      --text: #222222;
+      --text-muted: #666666;
+      --success: #4ecca3;
+      --warning: #ffdd57;
+      --ghost-glow: rgba(78, 204, 163, 0.6);
+      --font-main: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --border-radius: 12px;
+      --btn-radius: 8px;
+    }
+
+    /* Theme: Space Explorer */
+    [data-theme="space"] {
+      --bg-primary: #02010a;
+      --bg-secondary: #0a0a1a;
+      --bg-tertiary: #050510;
+      --accent: #6a0dad;
+      --accent-secondary: #8a2be2;
+      --text: #e0e0ff;
+      --text-muted: #a0a0cc;
+      --success: #00ff88;
+      --warning: #ffdd00;
+      --ghost-glow: rgba(255, 221, 0, 0.8);
+      --font-main: 'Exo 2', 'Segoe UI', sans-serif;
+      --border-radius: 20px;
+      --btn-radius: 20px;
+    }
+
+    /* Theme: Pixel Art */
+    [data-theme="pixel"] {
+      --bg-primary: #2d2d2d;
+      --bg-secondary: #3d3d3d;
+      --bg-tertiary: #1d1d1d;
+      --accent: #ff4040;
+      --accent-secondary: #cc3333;
+      --text: #f9f9f9;
+      --text-muted: #cccccc;
+      --success: #00ff00;
+      --warning: #ffdd00;
+      --ghost-glow: rgba(255, 221, 0, 0.9);
+      --font-main: 'Press Start 2P', 'Courier New', monospace;
+      --border-radius: 0;
+      --btn-radius: 0;
+    }
+
+    /* Theme: Ocean */
+    [data-theme="ocean"] {
+      --bg-primary: #001f3f;
+      --bg-secondary: #003366;
+      --bg-tertiary: #004080;
+      --accent: #0074d9;
+      --accent-secondary: #0056b3;
+      --text: #7fdbff;
+      --text-muted: #39cccc;
+      --success: #2ecc40;
+      --warning: #ffdc00;
+      --ghost-glow: rgba(127, 219, 255, 0.8);
+      --font-main: 'Segoe UI', system-ui, sans-serif;
+      --border-radius: 25px;
+      --btn-radius: 25px;
+    }
+
+    /* Theme: Sunset */
+    [data-theme="sunset"] {
+      --bg-primary: #2d1b4e;
+      --bg-secondary: #1a0f2e;
+      --bg-tertiary: #0f0818;
+      --accent: #ff6b6b;
+      --accent-secondary: #ee5a5a;
+      --text: #ffd93d;
+      --text-muted: #ffb347;
+      --success: #6bcf7f;
+      --warning: #ff8c42;
+      --ghost-glow: rgba(255, 217, 61, 0.8);
+      --font-main: 'Segoe UI', system-ui, sans-serif;
+      --border-radius: 30px;
+      --btn-radius: 30px;
+    }
+
+    /* ========================================
+       BASE STYLES
+       ======================================== */
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+      transition: background-color 0.5s ease, color 0.3s ease;
+    }
+    
+    body {
+      font-family: var(--font-main);
+      background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+      min-height: 100vh;
+      overflow: hidden;
+      color: var(--text);
+    }
+
+    /* Space theme starfield effect */
+    [data-theme="space"] body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 50px 160px, #ddd, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 130px 80px, #fff, rgba(0,0,0,0));
+      background-repeat: repeat;
+      background-size: 200px 200px;
+      opacity: 0.3;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Ocean theme wave effect */
+    [data-theme="ocean"] body::before {
+      content: '';
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100px;
+      background: linear-gradient(to top, rgba(0, 116, 217, 0.3), transparent);
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(10px);
+      position: relative;
+      z-index: 100;
+    }
+
+    [data-theme="minimal"] .header {
+      background: rgba(255,255,255,0.8);
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+    
+    .logo {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    [data-theme="pixel"] .logo {
+      font-size: 0.9rem;
+    }
+
+    .theme-indicator {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      background: rgba(0,0,0,0.6);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      z-index: 150;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .theme-indicator:hover {
+      background: var(--accent);
+      color: white;
+    }
+    
+    .stats {
+      display: flex;
+      gap: 25px;
+      font-size: 1.1rem;
+    }
+    
+    .stat-value {
+      font-weight: bold;
+      color: var(--success);
+      font-size: 1.3rem;
+    }
+    
+    #gameArea {
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 160px);
+      cursor: crosshair;
+      z-index: 1;
+    }
+    
+    .ghost {
+      position: absolute;
+      font-size: 50px;
+      user-select: none;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+      filter: drop-shadow(0 0 10px var(--ghost-glow));
+      animation: float 2s ease-in-out infinite;
+    }
+
+    [data-theme="pixel"] .ghost {
+      image-rendering: pixelated;
+    }
+    
+    .ghost:hover { transform: scale(1.2); }
+    .ghost:active { transform: scale(0.9); }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+    
+    .scorePopup {
+      position: absolute;
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--success);
+      pointer-events: none;
+      animation: popUp 0.8s ease-out forwards;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+    
+    @keyframes popUp {
+      0% { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-50px) scale(1.5); }
+    }
+    
+    #startScreen, #endScreen, #limitScreen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.85);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 200;
+    }
+
+    [data-theme="minimal"] #startScreen,
+    [data-theme="minimal"] #endScreen,
+    [data-theme="minimal"] #limitScreen {
+      background: rgba(250,250,250,0.95);
+    }
+    
+    #endScreen, #limitScreen { display: none; }
+    
+    .screen-title {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      text-align: center;
+      text-shadow: 0 0 20px var(--ghost-glow);
+    }
+
+    [data-theme="pixel"] .screen-title {
+      font-size: 1.5rem;
+    }
+    
+    .screen-subtitle {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      text-align: center;
+      max-width: 500px;
+      line-height: 1.6;
+    }
+    
+    .btn {
+      padding: 15px 50px;
+      font-size: 1.3rem;
+      font-weight: bold;
+      border: none;
+      border-radius: var(--btn-radius);
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      color: #fff;
+      box-shadow: 0 5px 20px var(--ghost-glow);
+      transition: all 0.3s ease;
+      font-family: var(--font-main);
+    }
+
+    [data-theme="pixel"] .btn {
+      font-size: 0.9rem;
+      padding: 15px 30px;
+      box-shadow: 4px 4px 0 rgba(0,0,0,0.5);
+    }
+    
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px var(--ghost-glow);
+    }
+
+    [data-theme="pixel"] .btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 rgba(0,0,0,0.5);
+    }
+    
+    .final-score {
+      font-size: 5rem;
+      font-weight: bold;
+      color: var(--success);
+      margin: 20px 0;
+      text-shadow: 0 0 30px var(--ghost-glow);
+    }
+
+    [data-theme="pixel"] .final-score {
+      font-size: 2.5rem;
+    }
+    
+    .high-score {
+      font-size: 1.2rem;
+      color: var(--warning);
+      margin-bottom: 30px;
+    }
+    
+    .progress-container {
+      position: absolute;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 300px;
+      height: 10px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--success));
+      width: 100%;
+      transition: width 1s linear;
+    }
+    
+    .instructions {
+      position: absolute;
+      bottom: 105px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    
+    .bmc-section {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 15px;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(10px);
+      text-align: center;
+      z-index: 50;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+    }
+
+    [data-theme="minimal"] .bmc-section {
+      background: rgba(255,255,255,0.9);
+      border-top: 1px solid rgba(0,0,0,0.1);
+    }
+    
+    .bmc-section p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    
+    .bmc-button {
+      display: inline-block;
+      background: #ffdd00;
+      color: #000;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: transform 0.2s;
+    }
+    
+    .bmc-button:hover {
+      transform: translateY(-2px);
+    }
+    
+    .powered-by {
+      position: fixed;
+      bottom: 65px;
+      right: 20px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      z-index: 40;
+    }
+    
+    .powered-by a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* Theme-specific animations */
+    [data-theme="cyberpunk"] .ghost {
+      animation: float 1.5s ease-in-out infinite, glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from { filter: drop-shadow(0 0 5px var(--ghost-glow)); }
+      to { filter: drop-shadow(0 0 20px var(--ghost-glow)); }
+    }
+
+    [data-theme="retro"] .ghost {
+      animation: float 2s steps(4) infinite;
+    }
+  </style>
+</head>
+<body>
+  <!-- Theme indicator -->
+  <div class="theme-indicator" id="themeIndicator" onclick="cycleTheme()">
+    Theme: <span id="currentThemeName">Dark</span> (click to change)
+  </div>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">👻 Ghost Catcher</div>
+    <div class="stats">
+      <div class="stat">Score: <span class="stat-value" id="score">0</span></div>
+      <div class="stat">Time: <span class="stat-value" id="time">30</span>s</div>
+      <div class="stat">Level: <span class="stat-value" id="level">1</span></div>
+    </div>
+  </div>
+
+  <div id="gameArea"></div>
+
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+  <div class="instructions">Click ghosts to score points!</div>
+
+  <!-- Start Screen -->
+  <div id="startScreen">
+    <div class="screen-title">👻 {{ game_title }}</div>
+    <div class="screen-subtitle">
+      You've stumbled onto a 404 page, but don't be sad!<br><br>
+      👻 Click ghosts to score<br>
+      ⚡ Faster ghosts = more points<br>
+      👾 Bigger ghosts = bonus points
+    </div>
+    <button class="btn" onclick="startGame()">Start Game</button>
+  </div>
+
+  <!-- End Screen -->
+  <div id="endScreen">
+    <div class="screen-title">Time's Up!</div>
+    <div class="final-score" id="finalScore">0</div>
+    <div class="high-score" id="highScoreText"></div>
+    <div class="screen-subtitle" id="endMessage"></div>
+    <button class="btn" onclick="startGame()">Play Again</button>
+  </div>
+
+  <!-- Limit Screen -->
+  <div id="limitScreen">
+    <div class="screen-title">⚠️ Limit Reached</div>
+    <div class="screen-subtitle">
+      This site has reached its monthly limit of free 404 redirects.<br>
+      The site owner needs to upgrade to continue.
+    </div>
+    <button class="btn" onclick="window.history.back()">Go Back</button>
+  </div>
+
+  <!-- Buy Me a Coffee -->
+  <div class="bmc-section">
+    <p>While you're here, why not buy the site owner a coffee?</p>
+    <a href="" target="_blank" class="bmc-button" id="bmcLink">
+      ☕ Buy Me a Coffee
+    </a>
+  </div>
+  
+  <div class="powered-by">
+    Powered by <a href="/">404-Redirect Marketplace</a>
+  </div>
+
+  <script>
+    // ========================================
+    // THEME SYSTEM
+    // ========================================
+    const THEMES = [
+      { id: 'default', name: 'Dark', emoji: '🌙' },
+      { id: 'retro', name: 'Retro Arcade', emoji: '🕹️' },
+      { id: 'cyberpunk', name: 'Cyberpunk', emoji: '🌆' },
+      { id: 'minimal', name: 'Minimalist', emoji: '⚪' },
+      { id: 'space', name: 'Space', emoji: '🚀' },
+      { id: 'pixel', name: 'Pixel Art', emoji: '👾' },
+      { id: 'ocean', name: 'Ocean', emoji: '🌊' },
+      { id: 'sunset', name: 'Sunset', emoji: '🌅' }
+    ];
+
+    let currentThemeIndex = 0;
+
+    // Load saved theme or cycle based on visit count
+    function initTheme() {
+      const savedTheme = localStorage.getItem('smoke404_theme');
+      const visitCount = parseInt(localStorage.getItem('smoke404_visits') || '0');
+      
+      if (savedTheme) {
+        // Use saved theme
+        const themeIndex = THEMES.findIndex(t => t.id === savedTheme);
+        if (themeIndex >= 0) {
+          currentThemeIndex = themeIndex;
+        }
+      } else {
+        // Cycle theme based on visit count
+        currentThemeIndex = visitCount % THEMES.length;
+      }
+      
+      // Increment visit count
+      localStorage.setItem('smoke404_visits', (visitCount + 1).toString());
+      
+      applyTheme(currentThemeIndex);
+    }
+
+    function applyTheme(index) {
+      const theme = THEMES[index];
+      document.documentElement.setAttribute('data-theme', theme.id);
+      document.getElementById('currentThemeName').textContent = theme.emoji + ' ' + theme.name;
+      localStorage.setItem('smoke404_theme', theme.id);
+    }
+
+    function cycleTheme() {
+      currentThemeIndex = (currentThemeIndex + 1) % THEMES.length;
+      applyTheme(currentThemeIndex);
+    }
+
+    // Auto-cycle theme every 5 visits
+    function shouldAutoCycle() {
+      const visits = parseInt(localStorage.getItem('smoke404_visits') || '0');
+      return visits % 5 === 0;
+    }
+
+    // ========================================
+    // GAME CONFIG
+    // ========================================
+    // Parse URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const siteSlug = urlParams.get('site') || 'unknown';
+    const bmcLink = urlParams.get('bmc') || 'https://buymeacoffee.com';
+    const fromUrl = urlParams.get('from') || '';
+    
+    const CONFIG = {
+      overLimit: false,
+      siteSlug: siteSlug,
+      bmcLink: decodeURIComponent(bmcLink),
+      bmcClicked: false
+    };
+
+    if (CONFIG.overLimit) {
+      document.getElementById('startScreen').style.display = 'none';
+      document.getElementById('limitScreen').style.display = 'flex';
+    }
+
+    // Track BMC click
+    document.getElementById('bmcLink').addEventListener('click', function() {
+      CONFIG.bmcClicked = true;
+    });
+
+    // ========================================
+    // GAME STATE
+    // ========================================
+    let score = 0;
+    let timeLeft = 30;
+    let level = 1;
+    let gameInterval, spawnInterval;
+    let ghostId = 0;
+    let isPlaying = false;
+    let highScore = localStorage.getItem('ghostHighScore_' + siteSlug) || 0;
+
+    const ghostTypes = [
+      { type: 'normal', emoji: '👻', points: 10, minSize: 50, maxSize: 60, speed: 2000, chance: 0.5 },
+      { type: 'fast', emoji: '👺', points: 25, minSize: 40, maxSize: 50, speed: 800, chance: 0.25 },
+      { type: 'tiny', emoji: '👾', points: 50, minSize: 25, maxSize: 35, speed: 1500, chance: 0.15 },
+      { type: 'big', emoji: '🤡', points: 100, minSize: 70, maxSize: 90, speed: 2500, chance: 0.1 }
+    ];
+
+    const gameArea = document.getElementById('gameArea');
+    const scoreEl = document.getElementById('score');
+    const timeEl = document.getElementById('time');
+    const levelEl = document.getElementById('level');
+    const progressBar = document.getElementById('progressBar');
+    const startScreen = document.getElementById('startScreen');
+    const endScreen = document.getElementById('endScreen');
+
+    // ========================================
+    // GAME FUNCTIONS
+    // ========================================
+    function startGame() {
+      score = 0; 
+      timeLeft = 30; 
+      level = 1; 
+      isPlaying = true; 
+      ghostId = 0;
+      
+      scoreEl.textContent = score;
+      timeEl.textContent = timeLeft;
+      levelEl.textContent = level;
+      progressBar.style.width = '100%';
+      startScreen.style.display = 'none';
+      endScreen.style.display = 'none';
+      gameArea.innerHTML = '';
+      
+      gameInterval = setInterval(updateTimer, 1000);
+      spawnGhost();
+      spawnInterval = setInterval(spawnGhost, getSpawnRate());
+    }
+
+    function updateTimer() {
+      timeLeft--;
+      timeEl.textContent = timeLeft;
+      progressBar.style.width = (timeLeft / 30 * 100) + '%';
+      
+      if (timeLeft === 20 || timeLeft === 10) {
+        level++;
+        levelEl.textContent = level;
+        clearInterval(spawnInterval);
+        spawnInterval = setInterval(spawnGhost, getSpawnRate());
+      }
+      
+      if (timeLeft <= 0) endGame();
+    }
+
+    function getSpawnRate() {
+      return Math.max(400, 1200 - (level * 100));
+    }
+
+    function spawnGhost() {
+      if (!isPlaying) return;
+      
+      const r = Math.random();
+      let cumulative = 0, chosen = ghostTypes[0];
+      
+      for (const g of ghostTypes) {
+        cumulative += g.chance;
+        if (r <= cumulative) { chosen = g; break; }
+      }
+      
+      const size = Math.floor(Math.random() * (chosen.maxSize - chosen.minSize + 1)) + chosen.minSize;
+      const ghost = document.createElement('div');
+      ghost.className = `ghost ${chosen.type}`;
+      ghost.textContent = chosen.emoji;
+      ghost.style.fontSize = size + 'px';
+      ghost.dataset.points = chosen.points;
+      
+      const maxX = gameArea.clientWidth - size;
+      const maxY = gameArea.clientHeight - size - 30;
+      ghost.style.left = Math.random() * maxX + 'px';
+      ghost.style.top = Math.random() * maxY + 'px';
+      
+      ghost.addEventListener('click', (e) => {
+        if (!isPlaying) return;
+        e.stopPropagation();
+        const pts = parseInt(ghost.dataset.points);
+        score += pts;
+        scoreEl.textContent = score;
+        showScorePopup(e.clientX, e.clientY, pts);
+        ghost.remove();
+      });
+      
+      gameArea.appendChild(ghost);
+      
+      const lifeTime = Math.max(1500, chosen.speed - (level * 100));
+      setTimeout(() => {
+        if (ghost.parentNode) {
+          ghost.style.opacity = '0';
+          setTimeout(() => ghost.remove(), 300);
+        }
+      }, lifeTime);
+    }
+
+    function showScorePopup(x, y, pts) {
+      const pop = document.createElement('div');
+      pop.className = 'scorePopup';
+      pop.textContent = '+' + pts;
+      pop.style.left = x + 'px';
+      pop.style.top = y + 'px';
+      document.body.appendChild(pop);
+      setTimeout(() => pop.remove(), 800);
+    }
+
+    function endGame() {
+      isPlaying = false;
+      clearInterval(gameInterval);
+      clearInterval(spawnInterval);
+      
+      const newHigh = score > highScore;
+      if (newHigh) {
+        highScore = score;
+        localStorage.setItem('ghostHighScore_' + siteSlug, highScore);
+      }
+      
+      document.getElementById('finalScore').textContent = score;
+      document.getElementById('highScoreText').textContent = newHigh ? '🏆 New High Score!' : `High Score: ${highScore}`;
+      
+      let msg = '';
+      if (score >= 500) msg = 'Incredible! You are a ghost-catching master!';
+      else if (score >= 300) msg = 'Great job! Those ghosts never stood a chance.';
+      else if (score >= 150) msg = 'Nice work! Keep practicing to catch more.';
+      else if (score >= 50) msg = 'Not bad! Try again to improve your score.';
+      else msg = 'Those ghosts got away this time. Want to retry?';
+      
+      document.getElementById('endMessage').textContent = msg;
+      endScreen.style.display = 'flex';
+    }
+
+    // ========================================
+    // INITIALIZATION
+    // ========================================
+    initTheme();
+
+    // Track session on page unload
+    window.addEventListener('beforeunload', function() {
+      fetch(`/api/session?site=${siteSlug}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          session_id: '{{ site.slug }}_' + Date.now(),
+          score: score,
+          tip_clicked: CONFIG.bmcClicked,
+          theme: THEMES[currentThemeIndex].id
+        })
+      });
+    });
+  </script>
+</body>
+</html>

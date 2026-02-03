@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Snippet - 404 Smoke Test</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #fff;
+        }
+        .container {
+            background: rgba(0,0,0,0.3);
+            padding: 40px;
+            border-radius: 16px;
+            max-width: 700px;
+            width: 100%;
+        }
+        h1 {
+            color: #e94560;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #aaa;
+            margin-bottom: 30px;
+        }
+        .code-block {
+            background: #0d0d0d;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #4ecca3;
+            overflow-x: auto;
+            margin: 20px 0;
+            border-left: 4px solid #e94560;
+        }
+        .instructions {
+            margin-top: 30px;
+        }
+        .instructions h3 {
+            color: #e94560;
+            margin-bottom: 15px;
+        }
+        .instructions ol {
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+        .instructions li {
+            margin-bottom: 10px;
+        }
+        .btn {
+            display: inline-block;
+            background: #e94560;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Your JavaScript Snippet</h1>
+        <p class="subtitle">Add this one line to your website's &lt;head&gt; section</p>
+        
+        <div class="code-block" id="snippet">
+&lt;script src="https://404-smoke-test.vercel.app/404-smoke.js" 
+        data-site="demo-site" 
+        async&gt;&lt;/script&gt;
+        </div>
+        
+        <button onclick="copySnippet()" class="btn">📋 Copy Snippet</button>
+        
+        <div class="instructions">
+            <h3>Installation Instructions</h3>
+            <ol>
+                <li>Copy the code above</li>
+                <li>Paste it in your website's <code>&lt;head&gt;</code> section, before any other scripts</li>
+                <li>Replace <code>demo-site</code> with your actual site slug</li>
+                <li>That's it! Every 404 will now redirect to the ghost-catching game</li>
+            </ol>
+            
+            <h3>Testing</h3>
+            <ol>
+                <li>Visit a non-existent page on your site (e.g., <code>/test-404</code>)</li>
+                <li>You should be redirected to the game</li>
+                <li>Check your dashboard to see the tracked error</li>
+            </ol>
+        </div>
+        
+        <a href="/" class="btn">← Back to Home</a>
+    </div>
+    
+    <script>
+        function copySnippet() {
+            const snippet = document.getElementById('snippet').innerText;
+            navigator.clipboard.writeText(snippet).then(() => {
+                alert('Snippet copied to clipboard!');
+            });
+        }
+        
+        // Update snippet with current domain
+        const domain = window.location.origin;
+        const snippetEl = document.getElementById('snippet');
+        snippetEl.innerHTML = snippetEl.innerHTML.replace('https://404-smoke-test.vercel.app', domain);
+    </script>
+</body>
+</html>

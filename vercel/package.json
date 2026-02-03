@@ -1,0 +1,11 @@
+{
+  "name": "404-smoke-test",
+  "version": "1.0.0",
+  "description": "Turn 404 errors into a mini-game",
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0"
+  }
+}
